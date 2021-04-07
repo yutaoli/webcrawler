@@ -1,7 +1,7 @@
-import requests
 import pyquery
 import time
 import csv
+import wc_network
 
 
 def writeappendcsv(filename, rows):
@@ -12,16 +12,6 @@ def writeappendcsv(filename, rows):
 
         for row in rows:
             writer.writerow(row)
-
-
-def get_one_page(url):
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36'
-    }
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        return response.text
-    return None
 
 
 def get_products(products, html):
@@ -43,7 +33,7 @@ def get_products(products, html):
 products = []
 for i in range(1, 35):
     url = "https://ke.qq.com/course/list?price_min=1&page="+str(i)
-    html = get_one_page(url)
+    html = wc_network.get_one_page(url)
     print(url)
     print("\n")
     time.sleep(1)
