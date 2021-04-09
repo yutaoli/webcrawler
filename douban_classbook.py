@@ -233,4 +233,4 @@ get_recommand_books(recommand_books, start_pageurl, 1000)
 
 # display
 #print(recommand_books)
-writeappendcsv('./douban_books.csv', recommand_books)
+writeappendcsv('./douban_classbook.csv', recommand_books)
