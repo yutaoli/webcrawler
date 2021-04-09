@@ -229,7 +229,7 @@ def get_recommand_books(recommand_books, start_pageurl, book_num):
 ###main###
 recommand_books = []
 start_pageurl = 'https://book.douban.com/subject/34845099/'
-get_recommand_books(recommand_books, start_pageurl, 10)
+get_recommand_books(recommand_books, start_pageurl, 1000)
 
 # display
 #print(recommand_books)
