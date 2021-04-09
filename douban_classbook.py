@@ -5,11 +5,8 @@ import wc_network
 import time
 import csv
 
-#去重，id是isbn或者title_author
-uniq_books={}
-
 #推荐队列去重，id是title
-#uniq_recommand_books={}
+uniq_recommand_books={}
 
 def writeappendcsv(filename, rows):
     with open(filename, 'w', encoding='utf_8_sig', newline='') as csvfile:
@@ -110,16 +107,16 @@ def get_one_page_and_html_parse_with_pyquery(pageurl, recommand_books, recommand
         book_info_item = book_info_item.strip() #去掉多余的空格
 
         if '作者' in book_info_item:
-            authors = re.findall('<a class.*?>(.*)</a>', book_info_item)
+            authors = re.findall('<a .*?>(.*)</a>', book_info_item)
 
             i = 0
             for a_author in authors:
                 if i != 0:
-                    authors = authors + ','
+                    author = author + ','
                 
-                a_author = re.sub('<a class.*?>','',a_author)
+                a_author = re.sub('<a .*?>','',a_author)
                 a_author = re.sub('</a>','',a_author)
-                author = a_author
+                author = author + a_author.strip()
                 i = i + 1
         elif '出版社' in book_info_item:
             publish_press = re.sub('<span class.*?>(.*?)</span>','',book_info_item)
@@ -179,15 +176,6 @@ def get_one_page_and_html_parse_with_pyquery(pageurl, recommand_books, recommand
     }
     print(book)
 
-    #去重
-    title_author = title+'_'+author
-    if ISBN in uniq_books.keys() or (title_author in uniq_books.keys()):
-        print('already get this book')
-        return 1
-
-    uniq_books[ISBN]=1
-    uniq_books[title_author]=1
-
     recommand_books.append(book)
 
     doc_recommand = pyquery.PyQuery(html)
@@ -204,14 +192,14 @@ def get_one_page_and_html_parse_with_pyquery(pageurl, recommand_books, recommand
         
         if recommand_book['title'] == '':
             continue
-        # uniq_recommand_books去重，提高效率，这里有误杀的可能，部分好书，被过滤了，也只是少了几本书，但能保证筛选出来的书都不重复
-        '''
+
+        # uniq_recommand_books去重，提高效率，这里有误杀的可能，部分好书，被过滤了，也只是少了几本同名书，但能保证筛选出来的书都不重复
         if recommand_book['title'] in uniq_recommand_books.keys():
-            print('already in uniq_recommand_books,title=', recommand_book['title'])
+            #print('already in uniq_recommand_books,title=', recommand_book['title'])
             continue
 
         uniq_recommand_books[recommand_book['title']]=1
-        '''
+        
         recommand_pageurls.append(recommand_book['url'])
     return 0
 
@@ -241,7 +229,7 @@ def get_recommand_books(recommand_books, start_pageurl, book_num):
 ###main###
 recommand_books = []
 start_pageurl = 'https://book.douban.com/subject/34845099/'
-get_recommand_books(recommand_books, start_pageurl, 1000)
+get_recommand_books(recommand_books, start_pageurl, 10)
 
 # display
 #print(recommand_books)
