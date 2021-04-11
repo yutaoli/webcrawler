@@ -86,6 +86,9 @@ def get_one_page_and_html_parse_with_xml(pageurl, recommand_books, recommand_pag
 #下载成功返回0，否则返回1
 def get_one_page_and_html_parse_with_pyquery(pageurl, recommand_books, recommand_pageurls):
     html = wc_network.get_one_page(pageurl)
+    if html == None :
+        return -1
+    
     doc = pyquery.PyQuery(html)
 
     # 返回字段定义
@@ -128,6 +131,9 @@ def get_one_page_and_html_parse_with_pyquery(pageurl, recommand_books, recommand
                 i = i + 1
         elif '出版社' in book_info_item:
             publish_press = re.sub('<span class.*?>(.*?)</span>','',book_info_item)
+        elif '副标题' in book_info_item:
+            subtitle = re.sub('<span class.*?>(.*?)</span>','',book_info_item)
+            title = title + ':' + subtitle
         elif '译者' in book_info_item:
             i = 0
             pattern = re.compile('<a class.*?>(.*?)</a>')
@@ -236,7 +242,8 @@ def get_recommand_books(recommand_books, start_pageurl, book_num):
 
 ###main###
 recommand_books = []
-start_pageurl = 'https://book.douban.com/subject/34845099/'
+#start_pageurl = 'https://book.douban.com/subject/34845099/'
+start_pageurl = 'https://book.douban.com/subject/5372471/'
 get_recommand_books(recommand_books, start_pageurl, 1000)
 
 # display
