@@ -242,8 +242,10 @@ def get_recommand_books(recommand_books, start_pageurl, book_num):
 
 ###main###
 recommand_books = []
-#start_pageurl = 'https://book.douban.com/subject/34845099/'
-start_pageurl = 'https://book.douban.com/subject/5372471/'
+#start_pageurl = 'https://book.douban.com/subject/34845099/' #古代史
+#start_pageurl = 'https://book.douban.com/subject/5372471/' #近代史
+start_pageurl='https://book.douban.com/subject/6004630/' #通史
+#start_pageurl = '' # 案例集
 get_recommand_books(recommand_books, start_pageurl, 1000)
 
 # display
