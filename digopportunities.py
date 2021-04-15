@@ -44,5 +44,5 @@ for res_list_i in res_list:
     if i >= top_num:
         exit()
 
-    print(res_list_i[0], res_list_i[1])
+    print("{} {}%".format(res_list_i[0], res_list_i[1]/len(keywords_frequency)*100))
     i = i + 1
