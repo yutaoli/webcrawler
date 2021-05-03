@@ -242,11 +242,12 @@ def get_recommand_books(recommand_books, start_pageurl, book_num):
 
 ###main###
 recommand_books = []
-#start_pageurl = 'https://book.douban.com/subject/34845099/' #古代史
-#start_pageurl = 'https://book.douban.com/subject/5372471/' #近代史
-#start_pageurl='https://book.douban.com/subject/6004630/' #通史
-#start_pageurl = 'https://book.douban.com/subject/6508517/' # 案例集
-start_pageurl='https://book.douban.com/subject/1266211/' #意识形态
+#start_pageurl = 'https://book.douban.com/subject/34845099/' # 学术 古代史
+#start_pageurl = 'https://book.douban.com/subject/5372471/' # 学术 近代史
+#start_pageurl='https://book.douban.com/subject/6004630/' # 学术 通史
+#start_pageurl = 'https://book.douban.com/subject/6508517/' # 小说 案例集
+#start_pageurl='https://book.douban.com/subject/1266211/' # 学术 意识形态
+start_pageurl='https://book.douban.com/subject/1074178/' # 学术 经济
 get_recommand_books(recommand_books, start_pageurl, 1000)
 
 # display
