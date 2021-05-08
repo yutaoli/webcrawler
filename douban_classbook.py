@@ -16,7 +16,7 @@ import csv
 #推荐队列去重，id是title
 uniq_recommand_books={}
 
-def writeappendcsv(filename, rows):
+def writeappendcsv(filename, fieldnames, rows):
     with open(filename, 'w', encoding='utf_8_sig', newline='') as csvfile:
         '''
  'title':title,
@@ -33,8 +33,7 @@ def writeappendcsv(filename, rows):
         'pingjiarenshu':pingjiarenshu,
         'url':url,
         '''
-        fieldnames = ['title', 'author', 'publish_press', 'yizhe','publish_time','pages',
-        'price','series','series_url','ISBN','score','pingjiarenshu','url']
+        
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
@@ -255,4 +254,7 @@ get_recommand_books(recommand_books, start_pageurl, 1000)
 
 # display
 #print(recommand_books)
-writeappendcsv('./douban_classbook.csv', recommand_books)
+
+fieldnames = ['title', 'author', 'publish_press', 'yizhe','publish_time','pages',
+        'price','series','series_url','ISBN','score','pingjiarenshu','url']
+writeappendcsv('./douban_classbook.csv', fieldnames, recommand_books)
