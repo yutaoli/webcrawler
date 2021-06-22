@@ -249,8 +249,9 @@ recommand_books = []
 #start_pageurl = 'https://book.douban.com/subject/30128170/' # 学术 中国 宗教
 #start_pageurl='https://book.douban.com/subject/1266211/' # 学术 意识形态
 #start_pageurl='https://book.douban.com/subject/1074178/' # 学术 经济
-start_pageurl='https://book.douban.com/subject/10875961/' # 学术 社会学
-get_recommand_books(recommand_books, start_pageurl, 1000)
+#start_pageurl='https://book.douban.com/subject/10875961/' # 学术 社会学
+start_pageurl='https://book.douban.com/subject/35147504/' # 学术 当下中国经济
+get_recommand_books(recommand_books, start_pageurl, 200)
 
 # display
 #print(recommand_books)
