@@ -105,11 +105,18 @@ if not os.path.exists(dirname):
     os.makedirs(dirname)
 
 #下载html文件
-for num in range(1,106):
+# 那些事情：革命年代其实很精彩
+#total_page = 105
+#prefix_url = "https://tuoshuidu.com/article/65994/"
+
+
+total_page = 54
+prefix_url = "https://tuoshuidu.com/article/89130/"
+for num in range(1, total_page + 1):
     #https://tuoshuidu.com/article/65994/1.html
     
     htmlname = str(num)+".html"
-    url="https://tuoshuidu.com/article/65994/"+htmlname
+    url= prefix_url + htmlname
     htmlabspath = os.path.join(os.path.abspath('.'), dirname, htmlname)
 
     print("htmlname=",htmlname)
