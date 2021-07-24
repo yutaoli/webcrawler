@@ -7,7 +7,52 @@ import wc_network
 import pyquery
 import shutil
 
-def webpage2html(pagenumber, pageurl,htmlname):
+def zhikanlouzhu_webpage2html(pagenumber, pageurl,htmlname):
+    html = wc_network.get_one_page(pageurl)
+    if html == None :
+        return -1
+    
+    doc = pyquery.PyQuery(html)
+
+    title = doc('#main > div > div.ml > div:nth-child(2) > h1').text()
+    title_with_pagenumber = title + str(pagenumber)
+
+    info = str(doc('div.content'))# 变成字符串
+
+    info = re.sub('<ins class=\"adsbygoogle\" .*?>','',info)# 干掉广告
+
+    # 每个louInfo后面插入hr
+    hr = "<hr style=\"background-color: #e3e3e3; \
+    height: 1px; \
+    border: none;\"/>"
+
+    #(.|\r|\n)表示匹配任一字符，之前pattern = re.compile(r'(<div class=\"louInfo\">.*?div>)')匹配不上，是因为只用了.，而刚好string就是有\n，意不意外？
+    #说白了，就是不熟悉，没有穷尽，遗漏了
+    #会匹配两个()，用findall输出看对应的哪个是1，哪个是2，然后再用re.sub
+    pattern = re.compile(r'(<div class=\"louInfo\">(.|\r|\n)*?</div>)') 
+    #info = re.findall(pattern, info)
+    #print("info=",info)
+    #sys.exit()
+    
+    info = re.sub(pattern, r'\1'+hr, info)
+    print('info=',info)
+
+    out_html="<!DOCTYPE html> \
+    <!-- saved from url=(0042)https://tuoshuidu.com/article/65994/1.html --> \
+    <html lang=\"en\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> \
+    <head></head> \
+    <body><h1>" + title_with_pagenumber + "</h1>" + \
+    info + "</body> \
+    </html>"
+    
+    print("out_html=",out_html)
+
+    #将拼接好的html写入文件
+    with open(htmlname, 'w', encoding='utf-8') as f:
+        f.write(out_html)
+
+#脱水读
+def tuoshuidu_webpage2html(pagenumber, pageurl,htmlname):
     html = wc_network.get_one_page(pageurl)
     if html == None :
         return -1
@@ -33,11 +78,49 @@ def webpage2html(pagenumber, pageurl,htmlname):
     with open(htmlname, 'w', encoding='utf-8') as f:
         f.write(out_html)
 
+def zhikanlouzhu(total_page, prefix_url):
+
+    #total_page = 54
+    #prefix_url = "https://tuoshuidu.com/article/89130/"
+    for num in range(1, total_page + 1):
+        #https://tuoshuidu.com/article/65994/1.html
+        
+        htmlname = str(num)+".html"
+        url= prefix_url + htmlname
+        htmlabspath = os.path.join(os.path.abspath('.'), dirname, htmlname)
+
+        print("htmlname=",htmlname)
+        print("url=",url)
+        print("htmlabspath=",htmlabspath)
+
+        zhikanlouzhu_webpage2html(num, url,htmlabspath)
+
+def tuoshuidu(total_page, prefix_url):
+
+    #total_page = 54
+    #prefix_url = "https://tuoshuidu.com/article/89130/"
+    for num in range(1, total_page + 1):
+        #https://tuoshuidu.com/article/65994/1.html
+        
+        htmlname = str(num)+".html"
+        url= prefix_url + htmlname
+        htmlabspath = os.path.join(os.path.abspath('.'), dirname, htmlname)
+
+        print("htmlname=",htmlname)
+        print("url=",url)
+        print("htmlabspath=",htmlabspath)
+
+        tuoshuidu_webpage2html(num, url,htmlabspath)
 
 def htmls2pdf(dirpath, pdfname):
 
+    # https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
     options = {
-        'page-size': 'Letter',
+        #'page-size': 'Letter',
+        'page-size': 'A4',
+        'minimum-font-size': "39",
+        #'disable-smart-shrinking': 1,
+        #'dpi': 40,
         'margin-top': '0.75in',
         'margin-right': '0.75in',
         'margin-bottom': '0.75in',
@@ -50,7 +133,9 @@ def htmls2pdf(dirpath, pdfname):
             ('cookie-name1', 'cookie-value1'),
             ('cookie-name2', 'cookie-value2'),
         ],
-        'outline-depth': 10,
+        'outline-depth': 10, # 书签
+        'header-left': '微信公众号：沙场将点兵',
+        'header-right': '大虾观社会 www.dxgsh.com',
     }
 
     #合并到临时文件
@@ -105,25 +190,25 @@ if not os.path.exists(dirname):
     os.makedirs(dirname)
 
 #下载html文件
-# 那些事情：革命年代其实很精彩
-#total_page = 105
-#prefix_url = "https://tuoshuidu.com/article/65994/"
+website='zhikanlouzhu' #default tuoshuiduwang
+if website == 'zhikanlouzhu':
+    total_page = 223
+    prefix_url = "https://zhikanlouzhu.com/post/tianya/%E8%82%A1%E5%B8%82%E8%AE%BA%E8%B0%88/81038/"
 
 
-total_page = 54
-prefix_url = "https://tuoshuidu.com/article/89130/"
-for num in range(1, total_page + 1):
-    #https://tuoshuidu.com/article/65994/1.html
+    #total_page = 54
+    #prefix_url = "https://tuoshuidu.com/article/89130/"
+    zhikanlouzhu(total_page, prefix_url)
     
-    htmlname = str(num)+".html"
-    url= prefix_url + htmlname
-    htmlabspath = os.path.join(os.path.abspath('.'), dirname, htmlname)
+else:# tuoshuidu
+    # 那些事情：革命年代其实很精彩
+    total_page = 105
+    prefix_url = "https://tuoshuidu.com/article/65994/"
 
-    print("htmlname=",htmlname)
-    print("url=",url)
-    print("htmlabspath=",htmlabspath)
 
-    webpage2html(num, url,htmlabspath)
+    #total_page = 54
+    #prefix_url = "https://tuoshuidu.com/article/89130/"
+    tuoshuidu(total_page, prefix_url)
 
 #多个html文件转换成一个pdf
 htmls2pdf(dirname, "out.pdf")
