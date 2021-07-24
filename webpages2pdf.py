@@ -26,7 +26,8 @@ def zhikanlouzhu_webpage2html(pagenumber, pageurl,htmlname):
     height: 1px; \
     border: none;\"/>"
 
-    #(.|\r|\n)表示匹配任一字符，之前pattern = re.compile(r'(<div class=\"louInfo\">.*?div>)')匹配不上，是因为只用了.，而刚好string就是有\n，意不意外？
+    #(.|\r|\n)表示匹配任一字符，之前pattern = re.compile(r'(<div class=\"louInfo\">.*?div>)')匹配不上，
+    # 是因为只用了.，而刚好string就是有\n，意不意外？
     #说白了，就是不熟悉，没有穷尽，遗漏了
     #会匹配两个()，用findall输出看对应的哪个是1，哪个是2，然后再用re.sub
     pattern = re.compile(r'(<div class=\"louInfo\">(.|\r|\n)*?</div>)') 
